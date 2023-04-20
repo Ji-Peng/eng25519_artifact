@@ -1,0 +1,11 @@
+src/curve25519.c
+src/gfparith_8w.c
+src/moncurve.c
+src/table_w4_ed25519.c
+src/tedcurve.c
+src/tedtable.c
+src/utils.c
+src/clocks.c
+src/gfparith_1w.c
+src/openssl_curve25519.c
+src/openssl_curve25519.s

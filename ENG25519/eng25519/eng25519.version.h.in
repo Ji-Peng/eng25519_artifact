@@ -1,0 +1,15 @@
+#define ENG25519__DESC_STR "@PROJECT_DESCRIPTION@"
+
+#define ENG25519__VERSION_STR "@PROJECT_VERSION@"
+#define ENG25519__PROVIDER_STR "@provider@"
+#define ENG25519__BUILD_STR "@CMAKE_BUILD_TYPE@"
+#define ENG25519__BUILD_TIMESTAMP_STR "@BUILD_TIMESTAMP@"
+
+#define ENG25519_ENGINE_NAME \
+    ENG25519__DESC_STR \
+    " (" \
+        "v" ENG25519__VERSION_STR \
+        ", provider: " ENG25519__PROVIDER_STR \
+        ", build: " ENG25519__BUILD_STR \
+        ", built on: " ENG25519__BUILD_TIMESTAMP_STR \
+    ")"

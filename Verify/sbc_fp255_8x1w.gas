@@ -1,0 +1,74 @@
+#! $1c(%rsi) = %%EA
+#! (%rsi) = %%EA
+#! $1c(%rdx) = %%EA
+#! (%rdx) = %%EA
+#! $1c(%rdi) = %%EA
+#! (%rdi) = %%EA
+#! (%rip) = %%EA
+#! $1c(%rip) = %%EA
+#! %zmm$1c = %%zmm$1c
+
+#! endbr64 -> nop
+#! vzeroupper -> nop
+#! ret -> nop
+#! vpbroadcastq $1ea, $2zmm -> mov $2zmm_000 $1ea;\nmov $2zmm_001 $1ea;\nmov $2zmm_010 $1ea;\nmov $2zmm_011 $1ea;\nmov $2zmm_100 $1ea;\nmov $2zmm_101 $1ea;\nmov $2zmm_110 $1ea;\nmov $2zmm_111 $1ea
+#! vmovdqa64 $1ea, $2zmm -> mov $2zmm_000 $1ea;\nmov $2zmm_001 $1ea[+8];\nmov $2zmm_010 $1ea[+16];\nmov $2zmm_011 $1ea[+24];\nmov $2zmm_100 $1ea[+32];\nmov $2zmm_101 $1ea[+40];\nmov $2zmm_110 $1ea[+48];\nmov $2zmm_111 $1ea[+56]
+#! vmovdqa64 $2zmm, $1ea -> mov $1ea $2zmm_000;\nmov $1ea[+8] $2zmm_001;\nmov $1ea[+16] $2zmm_010;\nmov $1ea[+24] $2zmm_011;\nmov $1ea[+32] $2zmm_100;\nmov $1ea[+40] $2zmm_101;\nmov $1ea[+48] $2zmm_110;\nmov $1ea[+56] $2zmm_111
+#! vpsrlq $1c, $2zmm, $3zmm -> split $3zmm_000 tmp $2zmm_000 $1c;\nsplit $3zmm_001 tmp $2zmm_001 $1c;\nsplit $3zmm_010 tmp $2zmm_010 $1c;\nsplit $3zmm_011 tmp $2zmm_011 $1c;\nsplit $3zmm_100 tmp $2zmm_100 $1c;\nsplit $3zmm_101 tmp $2zmm_101 $1c;\nsplit $3zmm_110 tmp $2zmm_110 $1c;\nsplit $3zmm_111 tmp $2zmm_111 $1c
+#! vpandd $1zmm, $2zmm, $3zmm -> and $3zmm_000@uint64 $2zmm_000 $1zmm_000;\nand $3zmm_001@uint64 $2zmm_001 $1zmm_001;\nand $3zmm_010@uint64 $2zmm_010 $1zmm_010;\nand $3zmm_011@uint64 $2zmm_011 $1zmm_011;\nand $3zmm_100@uint64 $2zmm_100 $1zmm_100;\nand $3zmm_101@uint64 $2zmm_101 $1zmm_101;\nand $3zmm_110@uint64 $2zmm_110 $1zmm_110;\nand $3zmm_111@uint64 $2zmm_111 $1zmm_111
+#! vpmuludq $1ea, $2zmm, $3zmm -> mul $3zmm_000 $2zmm_000 $1ea;\nmul $3zmm_001 $2zmm_001 $1ea;\nmul $3zmm_010 $2zmm_010 $1ea;\nmul $3zmm_011 $2zmm_011 $1ea;\nmul $3zmm_100 $2zmm_100 $1ea;\nmul $3zmm_101 $2zmm_101 $1ea;\nmul $3zmm_110 $2zmm_110 $1ea;\nmul $3zmm_111 $2zmm_111 $1ea
+#! vmovdqa32 $2zmm, $1ea -> mov $1ea $2zmm_000;\nmov $1ea[+8] $2zmm_001;\nmov $1ea[+16] $2zmm_010;\nmov $1ea[+24] $2zmm_011;\nmov $1ea[+32] $2zmm_100;\nmov $1ea[+40] $2zmm_101;\nmov $1ea[+48] $2zmm_110;\nmov $1ea[+56] $2zmm_111
+#! vpaddq $1ea, $2zmm, $3zmm -> add $3zmm_000 $2zmm_000 $1ea;\nadd $3zmm_001 $2zmm_001 $1ea[+8];\nadd $3zmm_010 $2zmm_010 $1ea[+16];\nadd $3zmm_011 $2zmm_011 $1ea[+24];\nadd $3zmm_100 $2zmm_100 $1ea[+32];\nadd $3zmm_101 $2zmm_101 $1ea[+40];\nadd $3zmm_110 $2zmm_110 $1ea[+48];\nadd $3zmm_111 $2zmm_111 $1ea[+56]
+#! vpaddq $1zmm, $2zmm, $3zmm -> add $3zmm_000 $2zmm_000 $1zmm_000;\nadd $3zmm_001 $2zmm_001 $1zmm_001;\nadd $3zmm_010 $2zmm_010 $1zmm_010;\nadd $3zmm_011 $2zmm_011 $1zmm_011;\nadd $3zmm_100 $2zmm_100 $1zmm_100;\nadd $3zmm_101 $2zmm_101 $1zmm_101;\nadd $3zmm_110 $2zmm_110 $1zmm_110;\nadd $3zmm_111 $2zmm_111 $1zmm_111
+#! vpaddq $1zmm, $2zmm, $3zmm -> add $3zmm_000 $2zmm_000 $1zmm_000;\nadd $3zmm_001 $2zmm_001 $1zmm_001;\nadd $3zmm_010 $2zmm_010 $1zmm_010;\nadd $3zmm_011 $2zmm_011 $1zmm_011;\nadd $3zmm_100 $2zmm_100 $1zmm_100;\nadd $3zmm_101 $2zmm_101 $1zmm_101;\nadd $3zmm_110 $2zmm_110 $1zmm_110;\nadd $3zmm_111 $2zmm_111 $1zmm_111
+#! vpsubq $1ea, $2zmm, $3zmm -> sub $3zmm_000 $2zmm_000 $1ea;\nsub $3zmm_001 $2zmm_001 $1ea[+8];\nsub $3zmm_010 $2zmm_010 $1ea[+16];\nsub $3zmm_011 $2zmm_011 $1ea[+24];\nsub $3zmm_100 $2zmm_100 $1ea[+32];\nsub $3zmm_101 $2zmm_101 $1ea[+40];\nsub $3zmm_110 $2zmm_110 $1ea[+48];\nsub $3zmm_111 $2zmm_111 $1ea[+56]
+
+# sbc_fp255_8x1w:
+# %rdi = 0x7fffffffd780
+# %rsi = 0x7fffffffd500
+# %rdx = 0x7fffffffd640
+# %rcx = 0x1
+# %r8  = 0x0
+# %r9  = 0x7fffffffd397
+	#! -> SP = 0x7fffffffd4b8
+	endbr64                                         #! PC = 0x555555556330
+	vmovdqa64 (%rsi),%zmm7                          #! EA = L0x7fffffffd500; Value = 0x00007fffffffd610; PC = 0x555555556334
+	vmovdqa64 0x80(%rsi),%zmm0                      #! EA = L0x7fffffffd580; Value = 0x0000000000000000; PC = 0x55555555633a
+	vpsubq (%rdx),%zmm7,%zmm3                       #! EA = L0x7fffffffd640; Value = 0x2f2f2f2f2f2f2f2f; PC = 0x555555556341
+	vpsubq 0x80(%rdx),%zmm0,%zmm1                   #! EA = L0x7fffffffd6c0; Value = 0x0000000000000000; PC = 0x555555556347
+	vpbroadcastq 0x13eb0(%rip),%zmm5        # 0x55555556a208#! EA = L0x55555556a208; Value = 0x000ffffffffffffe; PC = 0x55555555634e
+	vmovdqa64 0x40(%rsi),%zmm6                      #! EA = L0x7fffffffd540; Value = 0x0000000000000009; PC = 0x555555556358
+	vmovdqa64 0xc0(%rsi),%zmm15                     #! EA = L0x7fffffffd5c0; Value = 0x2f2f2f2f2f2f2f2f; PC = 0x55555555635f
+	vpaddq 0x100(%rsi),%zmm5,%zmm4                  #! EA = L0x7fffffffd600; Value = 0x0000000000000000; PC = 0x555555556366
+	vpaddq 0x13e89(%rip){1to8},%zmm3,%zmm9        # 0x55555556a200#! EA = L0x55555556a200; PC = 0x55555555636d
+	vpaddq %zmm5,%zmm1,%zmm10                       #! PC = 0x555555556377
+	vpsubq 0x40(%rdx),%zmm6,%zmm2                   #! EA = L0x7fffffffd680; Value = 0x5500747365745f32; PC = 0x55555555637d
+	vpsubq 0xc0(%rdx),%zmm15,%zmm7                  #! EA = L0x7fffffffd700; Value = 0x0000004000000000; PC = 0x555555556384
+	vpsrlq $0x33,%zmm9,%zmm8                        #! PC = 0x55555555638b
+	vpsrlq $0x33,%zmm10,%zmm14                      #! PC = 0x555555556392
+	vpsubq 0x100(%rdx),%zmm4,%zmm11                 #! EA = L0x7fffffffd740; Value = 0x0000000000000002; PC = 0x555555556399
+	vpaddq %zmm5,%zmm8,%zmm12                       #! PC = 0x5555555563a0
+	vpaddq %zmm5,%zmm14,%zmm3                       #! PC = 0x5555555563a6
+	vmovdqa32 0x13d8a(%rip),%zmm5        # 0x55555556a140#! EA = L0x55555556a140; Value = 0x0007ffffffffffff; PC = 0x5555555563ac
+	vpaddq %zmm12,%zmm2,%zmm13                      #! PC = 0x5555555563b6
+	vpaddq %zmm3,%zmm7,%zmm0                        #! PC = 0x5555555563bc
+	vpsrlq $0x33,%zmm11,%zmm1                       #! PC = 0x5555555563c2
+	vpsrlq $0x33,%zmm13,%zmm8                       #! PC = 0x5555555563c9
+	vpsrlq $0x33,%zmm0,%zmm6                        #! PC = 0x5555555563d0
+	vpandd %zmm5,%zmm9,%zmm9                        #! PC = 0x5555555563d7
+	vpandd %zmm5,%zmm10,%zmm10                      #! PC = 0x5555555563dd
+	vpandd %zmm5,%zmm11,%zmm11                      #! PC = 0x5555555563e3
+	vpandd %zmm5,%zmm13,%zmm12                      #! PC = 0x5555555563e9
+	vpandd %zmm5,%zmm0,%zmm14                       #! PC = 0x5555555563ef
+	vpaddq %zmm10,%zmm8,%zmm13                      #! PC = 0x5555555563f5
+	vpaddq %zmm11,%zmm6,%zmm15                      #! PC = 0x5555555563fb
+	vpmuludq 0x13cf5(%rip),%zmm1,%zmm4        # 0x55555556a100#! EA = L0x55555556a100; Value = 0x0000000000000013; PC = 0x555555556401
+	vpaddq %zmm9,%zmm4,%zmm2                        #! PC = 0x55555555640b
+	vmovdqa64 %zmm2,(%rdi)                          #! EA = L0x7fffffffd780; PC = 0x555555556411
+	vmovdqa32 %zmm12,0x40(%rdi)                     #! EA = L0x7fffffffd7c0; PC = 0x555555556417
+	vmovdqa64 %zmm13,0x80(%rdi)                     #! EA = L0x7fffffffd800; PC = 0x55555555641e
+	vmovdqa32 %zmm14,0xc0(%rdi)                     #! EA = L0x7fffffffd840; PC = 0x555555556425
+	vmovdqa64 %zmm15,0x100(%rdi)                    #! EA = L0x7fffffffd880; PC = 0x55555555642c
+	vzeroupper                                      #! PC = 0x555555556433
+	#! <- SP = 0x7fffffffd4b8
+	#ret                                            #! PC = 0x555555556436

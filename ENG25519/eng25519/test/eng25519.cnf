@@ -1,0 +1,12 @@
+openssl_conf = openssl_def
+
+[openssl_def]
+engines = engine_section
+
+[engine_section]
+eng25519 = eng25519_section
+
+[eng25519_section]
+engine_id = eng25519
+default_algorithms = ALL
+init = 1

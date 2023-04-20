@@ -1,0 +1,4 @@
+thirdparty/p25519mul.S
+thirdparty/p25519.c
+datatype.c
+montgomery.c

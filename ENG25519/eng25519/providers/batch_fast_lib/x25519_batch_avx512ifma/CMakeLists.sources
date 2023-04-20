@@ -1,0 +1,9 @@
+ecdh.c
+gfparith.c
+moncurve.c
+table_w4_ed25519.c
+tedcurve.c
+tedtable.c
+utils.c
+clocks.c
+../ed25519_fast_avx512ifma/eltfp255_1w_fullradix.c
