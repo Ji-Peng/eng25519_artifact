@@ -18,7 +18,6 @@ do
         sleep $(($long_time / 10))
         backup_unbound_log $filename
     done
-    server_notify_to_bark "We got $(basename "$filename")"
 done
 wait_until P256-END
 server_print_status P-256 benchmark end
@@ -37,7 +36,6 @@ do
         sleep $(($long_time / 10))
         backup_unbound_log $filename
     done
-    server_notify_to_bark "We got $(basename "$filename")"
 done
 wait_until X25519-ENG25519-END
 server_print_status X25519-ENG25519 benchmark end
@@ -56,7 +54,6 @@ do
         sleep $(($long_time / 10))
         backup_unbound_log $filename
     done
-    server_notify_to_bark "We got $(basename "$filename")"
 done
 wait_until X25519-END
 server_print_status X25519 benchmark end
@@ -75,7 +72,6 @@ do
         sleep $(($long_time / 10))
         backup_unbound_log $filename
     done
-    server_notify_to_bark "We got $(basename "$filename")"
 done
 wait_until X25519-AllOpenSSL-END
 server_print_status X25519-AllOpenSSL benchmark end
@@ -83,4 +79,3 @@ mecho
 
 compile_eng25519_us
 kill_unbound
-server_notify_to_bark "ALL Done"

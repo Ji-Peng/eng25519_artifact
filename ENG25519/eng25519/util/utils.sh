@@ -37,16 +37,6 @@ mecho() {
     echo -e "$*" >> log/$current_time_path/dot_bench.log
 }
 
-server_notify_to_bark() {
-    content=$(echo "$*" | sed 's/\\n/%0a/g')
-    curl -s -X GET https://api.day.app/86FBv5LaNpuni4MPaFpaVm/"DoT-benchmark Server"/"${content}"?group=DoT-"$current_time_path" &>/dev/null &
-}
-
-client_notify_to_bark() {
-    content=$(echo "$*" | sed 's/\\n/%0a/g')
-    # curl -s -X GET https://api.day.app/86FBv5LaNpuni4MPaFpaVm/"DoT-benchmark Clients"/"${content}"?group=DoT-"$current_time_path" &>/dev/null &
-}
-
 server_print_status() {
     output=""
     current_time=$(date +"%Y-%m-%d %H:%M:%S")
@@ -60,7 +50,6 @@ server_print_status() {
         output+="$ps_out"
     fi
     mecho "$output"
-    server_notify_to_bark "$output"
 }
 
 client_print_status() {
@@ -76,7 +65,6 @@ client_print_status() {
         output+="$ps_out"
     fi
     mecho "$output"
-    client_notify_to_bark "$output"
 }
 
 kill_unbound() {
@@ -235,7 +223,6 @@ print_timeline() {
     output+="The end time of X25519-AllOpenSSL benchmark: ${end_time_x25519_AllOpenSSL}\n"
     
     mecho $output
-    client_notify_to_bark $output
 }
 
 # compile eng25519 with our optimized implementation
