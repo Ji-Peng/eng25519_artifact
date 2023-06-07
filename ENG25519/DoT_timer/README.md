@@ -13,7 +13,7 @@ The file `DoT_timer.c` is the source code of `dot_timer` and `tls_timer.c` is th
 
 ```bash
 ### <Step 1: Prerequisites>
-sudo apt install -y git wget build-essential cmake pkg-config
+sudo apt install -y git wget build-essential cmake pkg-config flex byacc
 # The openssl will be installed into this path. CMake will find related headers and libraries from this path.
 export ENG25519_PREFIX=$HOME/local-eng25519
 # Bash will find the openssl executable tool from this path.
