@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2024 Jipeng Zhang (jp-zhang@outlook.com)
+ *
+ * This source code is licensed under the GNU Lesser General Public License
+ * found in the license file in the root directory of this source tree.
+ */
+
 #include <openssl/rand.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -91,7 +98,8 @@ void test_ecdh()
     seed = 1;
     srand(seed);
 
-    for (i = 0; i < SECRET_KEY_BYTES / 4; i++) {
+    for (i = 0; i < SECRET_KEY_BYTES / 4; i++)
+    {
         sks[4][i] = rand32();
         sks[5][i] = rand32();
         sks[6][i] = rand32();
@@ -106,18 +114,22 @@ void test_ecdh()
 
     x25519_batch_keygen_8x1w((uint8_t *)pks2, (uint8_t *)sks);
 
-    for (i = 0; i < NWORDS_8x1; i++) {
+    for (i = 0; i < NWORDS_8x1; i++)
+    {
         STORE(pks_storage[i], pks_vec[i]);
     }
-    for (i = 0; i < BATCH_SIZE; i++) {
-        for (j = 0; j < NWORDS_8x1; j++) {
+    for (i = 0; i < BATCH_SIZE; i++)
+    {
+        for (j = 0; j < NWORDS_8x1; j++)
+        {
             pk_temp[j] = pks_storage[j][i];
         }
         conv_51to64((pks1 + (PUBLIC_KEY_BYTES / 8) * i), (PUBLIC_KEY_BYTES / 8), pk_temp,
                     NWORDS_8x1);
     }
     /** compare two different-output-form functions' outputs */
-    if (memcmp(pks1, pks2, PUBLIC_KEY_BYTES * BATCH_SIZE) != 0) {
+    if (memcmp(pks1, pks2, PUBLIC_KEY_BYTES * BATCH_SIZE) != 0)
+    {
         printf("x25519_batch_keygen_8x1w error\n");
         return;
     }
@@ -137,15 +149,19 @@ void test_ecdh()
      */
     x25519_derive_avx512_8x1w(sss_vec, sks_vec, pks_vec);
 
-    for (i = 0; i < NWORDS_8x1; i++) {
+    for (i = 0; i < NWORDS_8x1; i++)
+    {
         STORE(sss_storage[i], sss_vec[i]);
     }
-    for (i = 0; i < BATCH_SIZE; i++) {
-        for (j = 0; j < NWORDS_8x1; j++) {
+    for (i = 0; i < BATCH_SIZE; i++)
+    {
+        for (j = 0; j < NWORDS_8x1; j++)
+        {
             ss_temp[j] = sss_storage[j][i];
         }
         conv_51to64(sss[i], (SHARED_KEY_BYTES) / 8, ss_temp, NWORDS_8x1);
-        if (i < 4) {
+        if (i < 4)
+        {
             /** compare with the values provided by RFC 7748 */
             wrong = wrong | (memcmp(sss[i], ss_ab_rfc, 4 * sizeof(uint64_t)));
         }
@@ -240,9 +256,12 @@ void test_ed25519_keygen()
     };
     uint8_t pks_0[BATCH_SIZE][PUBLIC_KEY_BYTES];
     ed25519_batch_keygen_8x1w((uint8_t *)pks_0, (uint8_t *)sks);
-    if (memcmp(pks, pks_0, sizeof(pks_0)) == 0) {
+    if (memcmp(pks, pks_0, sizeof(pks_0)) == 0)
+    {
         printf("Ed25519-KeyGen TEST: PASS including vectors from RFC8032!\n");
-    } else {
+    }
+    else
+    {
         printf("Ed25519-KeyGen TEST: NOT PASS!\n");
     }
 }
@@ -264,11 +283,13 @@ void test_ed25519_sign_verify()
                       0x1c, 0xf9, 0xb4, 0x6b, 0xd2, 0x5b, 0xf5, 0xf0, 0x59, 0x5b, 0xbe,
                       0x24, 0x65, 0x51, 0x41, 0x43, 0x8e, 0x7a, 0x10, 0x0b};
     ed25519_sign_1x8w(_sig, msg1, 0, pk1, sk1);
-    if (memcmp(_sig, sig1, 64) != 0) {
+    if (memcmp(_sig, sig1, 64) != 0)
+    {
         printf("Ed25519-Sign TEST: NOT PASS!\n");
         return;
     }
-    if (ed25519_verify_1x2w(msg1, 0, pk1, sig1) != 1) {
+    if (ed25519_verify_1x2w(msg1, 0, pk1, sig1) != 1)
+    {
         printf("Ed25519-Verify TEST: NOT PASS!\n");
         return;
     }
@@ -286,11 +307,13 @@ void test_ed25519_sign_verify()
                       0xd0, 0xf1, 0x1d, 0x8c, 0x38, 0x7b, 0x2e, 0xae, 0xb4, 0x30, 0x2a,
                       0xee, 0xb0, 0x0d, 0x29, 0x16, 0x12, 0xbb, 0x0c, 0x00};
     ed25519_sign_1x8w(_sig, msg2, 1, pk2, sk2);
-    if (memcmp(_sig, sig2, 64) != 0) {
+    if (memcmp(_sig, sig2, 64) != 0)
+    {
         printf("Ed25519-Sign TEST: NOT PASS!\n");
         return;
     }
-    if (ed25519_verify_1x2w(msg2, 1, pk2, sig2) != 1) {
+    if (ed25519_verify_1x2w(msg2, 1, pk2, sig2) != 1)
+    {
         printf("Ed25519-Verify TEST: NOT PASS!\n");
         return;
     }
@@ -308,16 +331,22 @@ void test_ed25519_sign_verify()
                       0x98, 0x4d, 0xc6, 0x59, 0x4a, 0x7c, 0x15, 0xe9, 0x71, 0x6e, 0xd2,
                       0x8d, 0xc0, 0x27, 0xbe, 0xce, 0xea, 0x1e, 0xc4, 0x0a};
     ed25519_sign_1x8w(_sig, msg3, 2, pk3, sk3);
-    if (memcmp(_sig, sig3, 64) != 0) {
+    if (memcmp(_sig, sig3, 64) != 0)
+    {
         printf("Ed25519-Sign TEST: NOT PASS!\n");
         return;
-    } else {
+    }
+    else
+    {
         printf("Ed25519-Sign TEST: PASS including vectors from RFC8032!\n");
     }
-    if (ed25519_verify_1x2w(msg3, 2, pk3, sig3) != 1) {
+    if (ed25519_verify_1x2w(msg3, 2, pk3, sig3) != 1)
+    {
         printf("Ed25519-Verify TEST: NOT PASS!\n");
         return;
-    } else {
+    }
+    else
+    {
         printf("Ed25519-Verify TEST: PASS including vectors from RFC8032!\n");
     }
 }

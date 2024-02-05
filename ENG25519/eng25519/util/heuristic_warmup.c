@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2024 Jipeng Zhang (jp-zhang@outlook.com)
+ *
+ * This source code is licensed under the GNU Lesser General Public License
+ * found in the license file in the root directory of this source tree.
+ */
+
 #define _XOPEN_SOURCE 600
 #define _POSIX_C_SOURCE 200112L
 #include <regex.h>

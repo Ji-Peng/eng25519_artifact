@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) 2024 Jipeng Zhang (jp-zhang@outlook.com)
+ *
+ * This source code is licensed under the GNU Lesser General Public License
+ * found in the license file in the root directory of this source tree.
+ */
 
 #ifndef _DEBUG_H
 #define _DEBUG_H
