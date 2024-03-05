@@ -1,6 +1,6 @@
 # Curve25519_AVX512IFMA
 
-This project is developed based on the [source code](https://gitlab.uni.lu/APSIA/AVXECC) of the paper "High-Throughput Elliptic Curve Cryptography Using AVX2 Vector Instructions".
+This project is developed based on the [source code](https://gitlab.uni.lu/APSIA/AVXECC) of the paper "High-Throughput Elliptic Curve Cryptography Using AVX2 Vector Instructions". Partial source code developed by Lirui Zhao (NUAA).
 
 ## Machine information
 
