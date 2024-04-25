@@ -14,20 +14,23 @@ We verify both the computational and input-output range correctness of our finit
 
 ### Prerequisites
 
-If you are are new to CryptoLine, we recommend you to read the [Prerequisites of CryptoLine](https://github.com/fmlab-iis/cryptoline#prerequisite) for building and installing it.
+If you are are new to `CryptoLine`, we recommend you to read the [Prerequisites of CryptoLine](https://github.com/fmlab-iis/cryptoline#prerequisite) for building and installing it.
 
-For linux platforms, such as Ubuntu 22.04, running the following commands will build and install CryptoLine. For other platforms, please see the [Prerequisites of CryptoLine](https://github.com/fmlab-iis/cryptoline#prerequisite).
+For linux platforms, such as Ubuntu 22.04, running the following commands will build and install `CryptoLine`. For other platforms, please see the [Prerequisites of CryptoLine](https://github.com/fmlab-iis/cryptoline#prerequisite).
 ```bash
 git clone https://github.com/fmlab-iis/cryptoline.git
 cd cryptoline
+# We use checkout to switch to a specific version, ensuring reproducibility within that version. Updated versions may introduce potential compatibility issues.
+git checkout 441274950ac068cf3ceb75fc57a3cd70835e0d18
 sudo apt -y install \
      build-essential ocaml ocaml-dune libzarith-ocaml-dev liblwt-ocaml-dev \
-     curl git bc cmake libreadline-dev boolector singular
-./scripts/install-aiger.sh
-./scripts/install-abc.sh
+     curl git bc cmake libreadline-dev boolector singular opam
+./scripts/install-boolector.sh
 dune build
 dune install
 ```
+
+Compiling `CryptoLine` in different environments may lead to different issues. Fortunately, the `CryptoLine` repository provides some scripts that can fix related dependencies to certain versions to aid in reproduction. Please refer to `script/update-build-environments`. If you encounter problems during the compilation process, we recommend trying to run this script and then switching to a specific environment using `opam switch`, for example, `opam switch ocaml4.13.1-coq8.15.0-ssr1.14.0; eval $(opam env)`.
 
 For more information on using CryptoLine, see:
 - [CryptoLine language tutorial provided by CryptoLine project](https://github.com/fmlab-iis/cryptoline/blob/master/doc/cryptoline.pdf),
