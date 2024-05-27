@@ -343,9 +343,62 @@ The raw experimental data required to reproduce Table 6 of our paper is located 
 To obtain the aforementioned four files, the following experimental steps should be performed:
 
 1. Recompile eng25519 on both the client and server with the `-DPRINT_CC` option.
-2. Start the server without an auxiliary thread and start the client without an auxiliary thread.
+2. Ensure `unbound` and `timer_warmup` are killed before running the server. Start the server without an auxiliary thread and start the client without an auxiliary thread.
 3. This will generate `c_unbound.txt` and `s_unbound.txt`.
-4. Restart the server with an auxiliary thread and restart the client with an auxiliary thread.
+4. Ensure `unbound` and `timer_warmup` are killed before running the server. Restart the server with an auxiliary thread and restart the client with an auxiliary thread. Starting the server/client with the auxiliary thread means first running the command `taskset -c 1 timer_warmup &` and then starting the server/client.
 5. This will generate `c_unbound_helper.txt` and `s_unbound_helper.txt`.
 
 Once you have obtained these four files, you can reproduce Table 6 using `cc.ipynb`.
+
+## Regarding the selection of X25519-KeyGen batch size
+
+Table 7 in our paper presents the amortized overhead of X25519-KeyGen with different batch sizes. The original experimental data is located in the `eng25519-results/batch_keygen` directory. Here, `s_` indicates that the data was obtained from testing on the server side, and `_helper` indicates that an auxiliary thread was used.
+
+Since these data were obtained during development, reproducing them requires slight modifications to the source code.
+
+The definition `#define X25519_KEYGEN_BATCH_NUM 16` in `ENG25519/eng25519/providers/batch_fast_lib/batch.c` sets the batch size to 16.
+
+To reproduce the data in `batch_keygen`, modify the batch size on the server side, recompile eng25519, and restart unbound with/without the auxiliary thread. Any client configuration can be used, as we only need to collect logs on the server.
+
+### Reproducing `s_b1.txt`
+
+1. Modify the batch size to 1.
+
+   Change the batch size to 1 in `ENG25519/eng25519/providers/batch_fast_lib/batch.c`:
+
+   ```c
+   #define X25519_KEYGEN_BATCH_NUM 1
+   ```
+
+   Optional: Comment out lines 68-72 in `ENG25519/eng25519/meths/eng25519_x25519_meth.c`, lines 123-127 and 162-166 in `ENG25519/eng25519/meths/eng25519_ed25519_meth.c` to avoid printing overhead for other cryptographic primitives.
+
+2. Recompile and reinstall eng25519 on the server with `-DPRINT_CC=1`.
+
+   ```bash
+   ### <Recompile and reinstall eng25519>
+   cd eng25519/build
+   # CMAKE_PREFIX_PATH: Cmake will search OpenSSL-related files from the specified path.
+   cmake -DCMAKE_BUILD_TYPE=Release -Dprovider="batch_fast_lib" -DCMAKE_PREFIX_PATH="${ENG25519_PREFIX}" -DPRINT_CC=1 ..
+   make && make install
+   ### </Recompile and reinstall eng25519>
+   ```
+
+3. Ensure `unbound` and `timer_warmup` are killed before running the server.
+
+4. Run the server.
+
+   ```bash
+   taskset -c 0 env OPENSSL_CONF="/root/eng25519/test/eng25519.cnf" unbound -c /root/eng25519/test/unbound.conf
+   ```
+
+5. Run the client.
+
+   ```bash
+   for i in {1..100}; do taskset -c 0 env OPENSSL_CONF="/root/eng25519/test/eng25519.cnf" dot_timer -n 10000 -connect $PEER_LOCAL_AD:853 -sigalgs ed25519 -client_sigalgs ed25519 -groups X25519 -no_ssl3 -no_tls1 -no_tls1_1 -no_tls1_2 >> temp.txt; done
+   ```
+
+6. The content of `eng25519.log` in the `unbound` running path on the server is the content of `s_b1.txt`.
+
+### Reproducing `s_b1_helper.txt`
+
+Most steps are the same as reproducing `s_b1.txt`. The only difference is to start the auxiliary thread using `taskset -c 1 timer_warmup &` before running `unbound`.
