@@ -39,6 +39,9 @@ If you want to use other machines for testing, make sure they support AVX-512IFM
 If you just want to reproduce the experimental results of the cryptographic performance part of the paper, one machine is enough.
 If you want to reproduce the experimental results of the DoT (DNS over TLS) part of the paper as accurately as possible, you should rent two machines with the same configuration in an internal network. When you purchase two machines on Alibaba Cloud at the same time, they are often in an internal network.
 
+Important Notice Regarding Ubuntu Versions:
+We only recommend using Ubuntu 20.04 for reproducing experiments related to DNS over TLS (DoT). This is because we have observed exceptionally low throughput issues with the DoT server `unbound` on newer versions of Ubuntu. For more details, please refer to [unbound-issues-1045](https://github.com/NLnetLabs/unbound/issues/1045).
+
 ## Compile and test `eng25519`
 
 In the following, we will install OpenSSL into a custom directory (i.e., `$ENG25519_PREFIX` path) and we will tell `CMake` to search that path for OpenSSL headers and libraries. Our `eng25519` project is placed into the `/root/` path and we use absolute path in some commands (e.g., `/root/eng25519/test/eng25519.cnf`). Therefore, you should modify those commands according to the path on your machine. Note that we use the `root` user when doing these experiments. If you use a normal user, you may encounter permission issues (such as when using port 853).
